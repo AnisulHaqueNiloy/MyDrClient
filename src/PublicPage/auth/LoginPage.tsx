@@ -1,14 +1,19 @@
 import React from 'react';
 import { User, Lock, Mail } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
+  const location = useLocation();
+  
+  // বর্তমান URL থেকে কোয়েরি প্যারামিটার (যেমন: ?role=patient) সংগ্রহ করা
+  const currentQuery = location.search; 
+
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-[#8E2DE2] via-[#4A00E0] to-[#1e3a8a] px-4">
       
       {/* Logo Section */}
       <div className="flex flex-col items-center mb-10 text-white">
         <div className="relative">
-          {/* Stethoscope Heart SVG Replacement */}
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -33,7 +38,7 @@ const LoginPage: React.FC = () => {
         
         {/* Login or E-mail Input */}
         <div className="relative group">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 border border-gray-400 rounded-full text-gray-500 bg-white">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 border border-gray-400 rounded-full text-gray-500 bg-white shadow-sm">
             <User size={18} />
           </div>
           <input
@@ -48,7 +53,7 @@ const LoginPage: React.FC = () => {
 
         {/* Password Input */}
         <div className="relative group">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 border border-gray-400 rounded-full text-gray-500 bg-white">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 border border-gray-400 rounded-full text-gray-500 bg-white shadow-sm">
             <Lock size={18} />
           </div>
           <input
@@ -61,20 +66,28 @@ const LoginPage: React.FC = () => {
         {/* Forgot Password Link */}
         <div className="text-right text-sm pr-4">
           <span className="text-white opacity-90">Forgot password? </span>
-          <a href="#" className="text-white underline font-medium hover:opacity-80">
+          <NavLink 
+            to={`/recover-password${currentQuery}`} 
+            className="text-white underline font-medium hover:opacity-80"
+          >
             Recover password
-          </a>
+          </NavLink>
         </div>
 
         {/* Action Buttons */}
-        <div className="pt-8 space-y-3">
-          <button className="w-full py-4 bg-[#3b82f6] hover:bg-blue-600 text-white font-semibold rounded-full shadow-lg transition-all active:scale-95 uppercase tracking-wide">
+        <div className="pt-8 space-y-3 flex flex-col items-center">
+          {/* Log In Button (Submit logic add korte hobe) */}
+          <button className="w-full py-4 bg-[#3b82f6] hover:bg-blue-600 text-white font-bold rounded-full shadow-lg transition-all active:scale-95 uppercase tracking-wide text-lg">
             Log In
           </button>
           
-          <button className="w-full py-4 bg-[#ec4899] hover:bg-pink-600 text-white font-semibold rounded-full shadow-lg transition-all active:scale-95 uppercase tracking-wide">
+          {/* Register NavLink (Query pass korbe) */}
+          <NavLink 
+            to={`/register${currentQuery}`}
+            className="w-full py-4 bg-[#ec4899] hover:bg-pink-600 text-white font-bold rounded-full shadow-lg transition-all active:scale-95 uppercase tracking-wide text-center text-lg"
+          >
             Register
-          </button>
+          </NavLink>
         </div>
 
       </div>
