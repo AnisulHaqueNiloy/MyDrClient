@@ -1,16 +1,46 @@
-import React from 'react';
-import { User, Lock, Mail } from 'lucide-react';
-import { NavLink, useLocation } from 'react-router-dom';
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate, NavLink } from "react-router-dom";
+import { User, Lock, Mail } from "lucide-react";
+import { setCredentials } from "../../redux/feature/auth/authSlice";
 
 const LoginPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
-  
-  // বর্তমান URL থেকে কোয়েরি প্যারামিটার (যেমন: ?role=patient) সংগ্রহ করা
-  const currentQuery = location.search; 
+
+  // URL থেকে রোল বের করা (যেমন: ?role=clinic)
+  const queryParams = new URLSearchParams(location.search);
+  const role = (queryParams.get("role") as "patient" | "clinic") || "patient";
+  const currentQuery = location.search;
+
+  const handleLogin = () => {
+    // স্ট্যাটিক লগইন সিমুলেশন (পরে এখানে API কল হবে)
+    const mockUser = {
+      name: "Anisul Haque Niloy",
+      email: "niloy2931@gmail.com",
+    };
+    const mockToken = "static-token-123456789";
+
+    // রেডুক্স স্টেট আপডেট
+    dispatch(
+      setCredentials({
+        user: mockUser,
+        token: mockToken,
+        role: role,
+      }),
+    );
+
+    // রোল অনুযায়ী ড্যাশবোর্ডে নেভিগেট করা
+    if (role === "clinic") {
+      navigate("/clinic-dashboard");
+    } else {
+      navigate("/patient-dashboard");
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-[#8E2DE2] via-[#4A00E0] to-[#1e3a8a] px-4">
-      
       {/* Logo Section */}
       <div className="flex flex-col items-center mb-10 text-white">
         <div className="relative">
@@ -31,11 +61,13 @@ const LoginPage: React.FC = () => {
         <h1 className="text-6xl font-serif italic font-light tracking-tight">
           MyDr
         </h1>
+        <p className="mt-2 uppercase tracking-[0.3em] text-sm opacity-80">
+          Login as {role}
+        </p>
       </div>
 
       {/* Form Section */}
       <div className="w-full max-w-[450px] space-y-4">
-        
         {/* Login or E-mail Input */}
         <div className="relative group">
           <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 border border-gray-400 rounded-full text-gray-500 bg-white shadow-sm">
@@ -66,8 +98,8 @@ const LoginPage: React.FC = () => {
         {/* Forgot Password Link */}
         <div className="text-right text-sm pr-4">
           <span className="text-white opacity-90">Forgot password? </span>
-          <NavLink 
-            to={`/recover-password${currentQuery}`} 
+          <NavLink
+            to={`/recover-password${currentQuery}`}
             className="text-white underline font-medium hover:opacity-80"
           >
             Recover password
@@ -76,20 +108,20 @@ const LoginPage: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="pt-8 space-y-3 flex flex-col items-center">
-          {/* Log In Button (Submit logic add korte hobe) */}
-          <button className="w-full py-4 bg-[#3b82f6] hover:bg-blue-600 text-white font-bold rounded-full shadow-lg transition-all active:scale-95 uppercase tracking-wide text-lg">
+          <button
+            onClick={handleLogin}
+            className="w-full py-4 bg-[#3b82f6] hover:bg-blue-600 text-white font-bold rounded-full shadow-lg transition-all active:scale-95 uppercase tracking-wide text-lg"
+          >
             Log In
           </button>
-          
-          {/* Register NavLink (Query pass korbe) */}
-          <NavLink 
+
+          <NavLink
             to={`/register${currentQuery}`}
             className="w-full py-4 bg-[#ec4899] hover:bg-pink-600 text-white font-bold rounded-full shadow-lg transition-all active:scale-95 uppercase tracking-wide text-center text-lg"
           >
             Register
           </NavLink>
         </div>
-
       </div>
     </div>
   );
