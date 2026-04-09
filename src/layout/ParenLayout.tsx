@@ -5,10 +5,9 @@ import Footer from "../shared_components/Footer";
 function ParenLayout() {
   return (
     <div>
-
-        <Navbar/>
+      <Navbar />
       <Outlet></Outlet>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
